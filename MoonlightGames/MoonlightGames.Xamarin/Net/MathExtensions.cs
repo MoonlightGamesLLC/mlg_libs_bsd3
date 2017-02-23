@@ -1,5 +1,5 @@
 ﻿using System;
-namespace MoonlightGames.Xamarin.Net
+namespace MoonlightGames.Net
 {
 	/// <summary>
 	/// A collection of math related functions

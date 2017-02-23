@@ -13,7 +13,7 @@ using System.ComponentModel;
  * OF SUCH DAMAGE.
  */
 
-namespace MoonlightGames.Xamarin.Collections
+namespace MoonlightGames.Net.Collections
 {
     /// <summary>
     /// Allows adding and removing a range of objects while only
