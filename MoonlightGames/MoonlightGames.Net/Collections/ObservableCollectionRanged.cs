@@ -44,6 +44,11 @@ namespace MoonlightGames.Net.Collections
 		/// <param name="range">Range.</param>
         public void AddRange(IEnumerable<T> range)
         {
+			if (range == null) 
+            {
+                return;
+			}
+
             foreach (var item in range)
             {
                 Items.Add(item);
@@ -61,7 +66,18 @@ namespace MoonlightGames.Net.Collections
         public void AssumeRange(IEnumerable<T> range)
         {
             Items.Clear();
-            AddRange(range);
+
+            if (range != null)
+            {
+                foreach (var item in range)
+                {
+                    Items.Add(item);
+                }
+            }
+
+            this.OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+            this.OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
 		/// <summary>
@@ -70,6 +86,11 @@ namespace MoonlightGames.Net.Collections
 		/// <param name="range">Range.</param>
         public void RemoveRange(IEnumerable<T> range)
         {
+            if (range == null)
+            {
+                return;
+            }
+
             foreach (var item in range)
             {
 				if(Items.Contains(item))
