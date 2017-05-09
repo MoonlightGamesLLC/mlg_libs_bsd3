@@ -66,6 +66,16 @@ namespace MoonlightGames.Net
             DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             return epoch;
         }
+
+        /// <summary>
+        /// Unix Epoch
+        /// </summary>
+        /// <returns>Converts a unix time to DateTime</returns>
+        public static DateTime UnixToDateTime(int secondsSinceEpoch)
+        {
+            DateTime epochTime = GetEpoch();
+            return epochTime.AddSeconds(secondsSinceEpoch);
+        }
     }
 }
 
