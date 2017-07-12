@@ -20,7 +20,6 @@ namespace MoonlightGames.Net
             watch.Start();
         }
 
-
         /// <summary>
         /// Stops the stopwatch and prints the time
         /// </summary>
