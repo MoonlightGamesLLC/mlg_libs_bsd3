@@ -9,7 +9,7 @@ namespace MoonlightGames.Net
     /// </summary>
     public class SmartStopwatch
     {
-        private  Stopwatch watch;
+        private readonly Stopwatch watch;
 
         /// <summary>
         /// Starts the stopwatch

@@ -15,7 +15,7 @@ namespace MoonlightGames.Net
         /// Easily log your exception with the stack trace
         /// </summary>
         /// <param name="ex"></param>
-		public static void Write(Exception ex)
+        public static void WriteEx(Exception ex)
 		{
 			Debug.WriteLine(string.Format("{0}{1}{2}", ex.Message, Environment.NewLine, ex.StackTrace));
 		}
