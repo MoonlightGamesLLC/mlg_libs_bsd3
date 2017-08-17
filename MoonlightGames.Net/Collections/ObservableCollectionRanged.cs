@@ -172,7 +172,15 @@ namespace MoonlightGames.Net.Collections
 
 				OnPropertyChanged(new PropertyChangedEventArgs(CountName));
 				OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
-				OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItems, oldItems));
+                try
+                {
+                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItems, oldItems));
+                }
+                catch(Exception ex)
+                {
+                    Utils.WriteEx(ex);
+                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                }
 			}
 			else
 			{
