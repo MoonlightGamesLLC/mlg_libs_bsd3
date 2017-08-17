@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace MoonlightGames.Net.Text
+namespace MoonlightGames.Net.Test
 {
     [TestFixture()]
     public class Test
