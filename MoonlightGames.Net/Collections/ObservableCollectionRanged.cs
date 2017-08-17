@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 
 /*
@@ -16,66 +17,79 @@ using System.Linq;
 
 namespace MoonlightGames.Net.Collections
 {
-    /// <summary>
-    /// Allows adding and removing a range of objects while only
+	/// <summary>
+	/// Allows adding and removing a range of objects while only
 	/// sending out one notification.
-    /// </summary>
-    public class ObservableCollectionRanged<T> : ObservableCollection<T>
-    {
+	/// </summary>
+	public class ObservableCollectionRanged<T> : ObservableCollection<T>
+	{
+		private const string CountName = nameof(Count);
+		private const string IndexerName = "Item[]";
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:MoonlightGames.Xamarin.Collections.ObservableCollectionRanged`1"/> class.
 		/// </summary>
-        public ObservableCollectionRanged() : base() { }
+		public ObservableCollectionRanged() : base() { }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:MoonlightGames.Xamarin.Collections.ObservableCollectionRanged`1"/> class.
 		/// </summary>
 		/// <param name="collection">Collection.</param>
-        public ObservableCollectionRanged(IEnumerable<T> collection) : base(collection) { }
+		public ObservableCollectionRanged(IEnumerable<T> collection) : base(collection) { }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:MoonlightGames.Xamarin.Collections.ObservableCollectionRanged`1"/> class.
 		/// </summary>
 		/// <param name="list">List.</param>
-        public ObservableCollectionRanged(List<T> list) : base(list) { }
+		public ObservableCollectionRanged(List<T> list) : base(list) { }
 
-        /// <summary>
-        /// Refresh this collection.
-        /// </summary>
+		/// <summary>
+		/// Refresh this collection.
+		/// </summary>
 		public void Refresh()
 		{
+			OnPropertyChanged(new PropertyChangedEventArgs(CountName));
+			OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
 			OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 		}
 
 		/// <summary>
 		/// Adds the range to the current list of items and sends one notification.
 		/// </summary>
-		/// <param name="range">Range. Throws ArgumentNullException</param>
-		public void AddRange(IEnumerable<T> range)
+		/// <param name="collection">Range. Throws ArgumentNullException</param>
+		public void AddRange(IEnumerable<T> collection)
 		{
-			if (range == null)
+			if (collection == null)
 			{
-				throw new ArgumentNullException(nameof(range));
+				throw new ArgumentNullException(nameof(collection));
 			}
 
-			foreach (T item in range)
+			CheckReentrancy();
+
+			int startingIndex = Items.Count;
+			foreach (T item in collection)
 			{
 				Items.Add(item);
 			}
 
-			OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, range));
+			var newItems = collection.ToList<T>();
+			Debug.Assert(newItems != null, $"Failed to cast {nameof(collection)} to {nameof(List<T>)}");
+
+			OnPropertyChanged(new PropertyChangedEventArgs(CountName));
+			OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
+			OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, newItems, startingIndex));
 		}
 
-        /// <summary>
-        /// Inserts the range and sends one notification.
-        /// </summary>
-        /// <param name="index">Index.</param>
-        /// <param name="range">Range.</param>
-		public void InsertRange(int index, IEnumerable<T> range)
+		/// <summary>
+		/// Inserts the range and sends one notification.
+		/// </summary>
+		/// <param name="index">Index.</param>
+		/// <param name="collection">Range.</param>
+		public void InsertRange(int index, IEnumerable<T> collection)
 		{
-			if (range == null)
+			if (collection == null)
 			{
-				throw new ArgumentNullException(nameof(range));
+				throw new ArgumentNullException(nameof(collection));
 			}
 
 			if (index < 0 || index > Items.Count)
@@ -83,60 +97,91 @@ namespace MoonlightGames.Net.Collections
 				throw new ArgumentOutOfRangeException(nameof(index));
 			}
 
-            int count = range.Count();
+			CheckReentrancy();
+
+			int count = collection.Count();
 			for (int i = 0; i < count; i++)
 			{
-                Items.Insert(index + i, range.ElementAt(i));
+				Items.Insert(index + i, collection.ElementAt(i));
 			}
 
-			OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, range, index));
+			var newItems = collection.ToList<T>();
+			Debug.Assert(newItems != null, $"Failed to cast {nameof(collection)} to {nameof(List<T>)}");
+
+			OnPropertyChanged(new PropertyChangedEventArgs(CountName));
+			OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
+			OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, newItems, index));
 		}
 
-		/// <summary>
-		/// Removes each item in the range, if it is in the current collection, and sends one notification.
-		/// </summary>
-		/// <param name="range">Range. Throws ArgumentNullException</param>
-		public void RemoveRange(IEnumerable<T> range)
-		{
-			if (range == null)
-			{
-				throw new ArgumentNullException(nameof(range));
-			}
+		///// <summary>
+		///// Removes each item in the range, if it is in the current collection, and sends one notification.
+		///// </summary>
+		///// <param name="collection">Range. Throws ArgumentNullException</param>
+		//public void RemoveRange(IEnumerable<T> collection)
+		//{
+		//	if (collection == null)
+		//	{
+		//		throw new ArgumentNullException(nameof(collection));
+		//	}
 
-            //Store the items that are found and removed
-            var removedItems = new List<T>(range.Count());
-			foreach (var item in range)
-			{
-				if (Items.Contains(item))
-				{
-					Items.Remove(item);
-                    removedItems.Add(item);
-				}
-			}
+		//	CheckReentrancy();
 
-			OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removedItems));
-		}
+		//	//Store the items that are found and removed
+		//	var changedItems = new List<T>(collection.Count());
+		//	foreach (var item in collection)
+		//	{
+		//		bool rem = Items.Remove(item);
+
+		//		if (rem == true)
+		//		{
+		//			changedItems.Add(item);
+		//		}
+		//	}
+
+		//	Debug.Assert(changedItems != null, $"Failed to cast {nameof(collection)} to {nameof(List<T>)}");
+
+		//	OnPropertyChanged(new PropertyChangedEventArgs(CountName));
+		//	OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
+		//	OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, changedItems, -1));
+		//}
 
 		/// <summary>
 		/// Replaces all current items with the items from the range and sends one notification.
 		/// </summary>
-		/// <param name="range">Range. Clears if null.</param>
-		public void AssumeRange(IEnumerable<T> range)
-        {
-            //Store the old items
-			T[] oldItems = new T[Items.Count()];
-			Items.CopyTo(oldItems, 0);
+		/// <param name="collection">Range. Clears if null.</param>
+		public void AssumeRange(IEnumerable<T> collection)
+		{
+			CheckReentrancy();
 
-			Items.Clear();
-			if (range != null)
+			if (collection != null && collection.Any())
 			{
-				foreach (T current in range)
-				{
-					Items.Add(current);
-				}
-			}
+				//Store the old items
+				var oldItems = Items.ToList<T>();
 
-			OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, Items, oldItems));
-        }
-    }
+				Items.Clear();
+				if (collection != null)
+				{
+					foreach (T current in collection)
+					{
+						Items.Add(current);
+					}
+				}
+
+				var newItems = collection.ToList<T>();
+				Debug.Assert(newItems != null, $"Failed to cast {nameof(collection)} to {nameof(List<T>)}");
+
+				OnPropertyChanged(new PropertyChangedEventArgs(CountName));
+				OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
+				OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItems, oldItems));
+			}
+			else
+			{
+				Items.Clear();
+
+				OnPropertyChanged(new PropertyChangedEventArgs(CountName));
+				OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
+				OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+			}
+		}
+	}
 }
