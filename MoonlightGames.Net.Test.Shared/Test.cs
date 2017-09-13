@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace MoonlightGames.Net.Test
+namespace MoonlightGames.Net.Test.Shared
 {
     [TestFixture()]
     public class Test
@@ -175,6 +175,21 @@ namespace MoonlightGames.Net.Test
 			};
 
 			ocr.AssumeRange(null);
+		}
+
+		[Test()]
+		public void TestCaseAddNull()
+		{
+			var ocr = new ObservableCollectionRanged<string>();
+
+			ocr.CollectionChanged += (sender, e) =>
+			{
+				Assert.IsTrue(e.Action == NotifyCollectionChangedAction.Add);
+				Assert.IsNull(e.NewItems);
+				Assert.IsNull(e.OldItems);
+			};
+
+            Assert.Throws<ArgumentNullException>(()=>ocr.AddRange(null));
 		}
     }
 }
