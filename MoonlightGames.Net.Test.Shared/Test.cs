@@ -191,5 +191,25 @@ namespace MoonlightGames.Net.Test.Shared
 
             Assert.Throws<ArgumentNullException>(()=>ocr.AddRange(null));
 		}
+
+		[Test()]
+		public void TestCaseReplaceRange()
+		{
+			var ocr = new ObservableCollectionRanged<string>();
+
+			ocr.AddRange(names1);
+
+			ocr.CollectionChanged += (sender, e) =>
+			{
+				Assert.IsTrue(e.Action == NotifyCollectionChangedAction.Replace);
+				Assert.IsNotNull(e.NewItems);
+				Assert.IsNotNull(e.OldItems);
+				Assert.IsTrue(e.OldItems.Count == names1.Count);
+				Assert.IsTrue(e.NewItems.Count == names2.Count);
+                Assert.IsTrue(ocr.Count == 1 + names2.Count);
+			};
+
+            ocr.ReplaceRange(1, names1.Count - 1, names2);
+		}
     }
 }
