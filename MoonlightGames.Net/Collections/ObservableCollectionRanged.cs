@@ -138,8 +138,8 @@ namespace MoonlightGames.Net.Collections
 
 			CheckReentrancy();
 
-			//Store the old items
-			var oldItems = Items.ToList<T>();
+            //Store the old items
+            var oldItems = Items.ToList<T>().GetRange(index, count);
 			
             for (int i = 0; i < count; i++)
 			{
@@ -221,7 +221,7 @@ namespace MoonlightGames.Net.Collections
 				OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
                 try
                 {
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItems, oldItems));
+                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItems, oldItems, 0));
                 }
                 catch(Exception ex)
                 {
