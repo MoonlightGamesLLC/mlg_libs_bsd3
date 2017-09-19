@@ -113,6 +113,53 @@ namespace MoonlightGames.Net.Collections
 			OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, newItems, index));
 		}
 
+		/// <summary>
+		/// Inserts the range and sends one notification.
+		/// </summary>
+		/// <param name="index">Index to start replacing.</param>
+		/// <param name="count">Number of items to remove.</param>
+		/// <param name="collection">Range.</param>
+		public void ReplaceRange(int index, int count, IEnumerable<T> collection)
+		{
+			if (collection == null)
+			{
+				throw new ArgumentNullException(nameof(collection));
+			}
+
+            if (index < 0 || index > Items.Count)
+			{
+				throw new ArgumentOutOfRangeException(nameof(index));
+			}
+
+			if ((index + count) > Items.Count)
+			{
+				throw new ArgumentOutOfRangeException(nameof(count));
+			}
+
+			CheckReentrancy();
+
+            //Store the old items
+            var oldItems = Items.ToList<T>().GetRange(index, count);
+			
+            for (int i = 0; i < count; i++)
+			{
+                Items.RemoveAt(index);
+			}
+
+			int collectionCount = collection.Count();
+			for (int i = 0; i < collectionCount; i++)
+            {
+                Items.Insert(i + index, collection.ElementAt(i));
+            }
+
+			var newItems = collection.ToList<T>();
+			Debug.Assert(newItems != null, $"Failed to cast {nameof(collection)} to {nameof(List<T>)}");
+
+			OnPropertyChanged(new PropertyChangedEventArgs(CountName));
+			OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItems, oldItems, index));
+		}
+
 		///// <summary>
 		///// Removes each item in the range, if it is in the current collection, and sends one notification.
 		///// </summary>
@@ -174,7 +221,7 @@ namespace MoonlightGames.Net.Collections
 				OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
                 try
                 {
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItems, oldItems));
+                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItems, oldItems, 0));
                 }
                 catch(Exception ex)
                 {

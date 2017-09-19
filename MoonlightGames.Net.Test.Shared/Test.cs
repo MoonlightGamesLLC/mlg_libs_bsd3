@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace MoonlightGames.Net.Test
+namespace MoonlightGames.Net.Test.Shared
 {
     [TestFixture()]
     public class Test
@@ -175,6 +175,43 @@ namespace MoonlightGames.Net.Test
 			};
 
 			ocr.AssumeRange(null);
+		}
+
+		[Test()]
+		public void TestCaseAddNull()
+		{
+			var ocr = new ObservableCollectionRanged<string>();
+
+			ocr.CollectionChanged += (sender, e) =>
+			{
+				Assert.IsTrue(e.Action == NotifyCollectionChangedAction.Add);
+				Assert.IsNull(e.NewItems);
+				Assert.IsNull(e.OldItems);
+			};
+
+            Assert.Throws<ArgumentNullException>(()=>ocr.AddRange(null));
+		}
+
+		[Test()]
+		public void TestCaseReplaceRange()
+		{
+			var ocr = new ObservableCollectionRanged<string>();
+
+			ocr.AddRange(names1);
+			int indexToRemove = 1;
+            int countToRemove = names1.Count - 1;
+
+			ocr.CollectionChanged += (sender, e) =>
+			{
+				Assert.IsTrue(e.Action == NotifyCollectionChangedAction.Replace);
+				Assert.IsNotNull(e.NewItems);
+				Assert.IsNotNull(e.OldItems);
+				Assert.IsTrue(e.OldItems.Count == countToRemove);
+				Assert.IsTrue(e.NewItems.Count == names2.Count);
+                Assert.IsTrue(ocr.Count == indexToRemove + names2.Count);
+			};
+
+            ocr.ReplaceRange(indexToRemove, countToRemove, names2);
 		}
     }
 }

@@ -32,9 +32,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Test.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -43,5 +40,6 @@
       <Name>MoonlightGames.Net</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\MoonlightGames.Net.Test.Shared\MoonlightGames.Net.Test.Shared.projitems" Label="Shared" Condition="Exists('..\MoonlightGames.Net.Test.Shared\MoonlightGames.Net.Test.Shared.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
