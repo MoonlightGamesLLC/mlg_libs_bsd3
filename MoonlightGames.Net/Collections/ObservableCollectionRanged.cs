@@ -220,7 +220,8 @@ namespace MoonlightGames.Net.Collections
 				OnPropertyChanged(new PropertyChangedEventArgs(CountName));
 				OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
 
-                if(oldItems.Count > 0)
+				//Many list views do not play nicely with Linq enumerables
+                if(string.Compare(collection.GetType().Namespace, "System.Linq") != 0)
                 {
                     try
                     {
