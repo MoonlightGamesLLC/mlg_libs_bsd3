@@ -200,7 +200,7 @@ namespace MoonlightGames.Net.Collections
 		{
 			CheckReentrancy();
 
-			if (collection != null && collection.Any())
+			if ((collection != null && collection.Any()))
 			{
 				//Store the old items
 				var oldItems = Items.ToList<T>();
@@ -219,16 +219,22 @@ namespace MoonlightGames.Net.Collections
 
 				OnPropertyChanged(new PropertyChangedEventArgs(CountName));
 				OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
-                try
+
+                if(oldItems.Count > 0)
                 {
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItems, oldItems, 0));
+                    try
+                    {
+                        OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItems, oldItems, 0));
+                        return;
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.WriteEx(ex);
+                    }
                 }
-                catch(Exception ex)
-                {
-                    Utils.WriteEx(ex);
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                }
-			}
+
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            }
 			else
 			{
 				Items.Clear();
