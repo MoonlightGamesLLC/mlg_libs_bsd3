@@ -223,18 +223,12 @@ namespace MoonlightGames.Net.Collections
 				//Many list views do not play nicely with Linq enumerables
                 if(string.Compare(collection.GetType().Namespace, "System.Linq") != 0)
                 {
-                    try
-                    {
-                        OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItems, oldItems, 0));
-                        return;
-                    }
-                    catch (Exception ex)
-                    {
-                        Utils.WriteEx(ex);
-                    }
+                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItems, oldItems, 0));
                 }
-
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                else
+                {
+                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                }
             }
 			else
 			{
