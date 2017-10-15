@@ -114,7 +114,8 @@ namespace MoonlightGames.Net.Collections
 		}
 
 		/// <summary>
-		/// Inserts the range and sends one notification.
+        /// Removes the specified range, then
+		/// Inserts the collection and sends one notification.
 		/// </summary>
 		/// <param name="index">Index to start replacing.</param>
 		/// <param name="count">Number of items to remove.</param>
