@@ -1,7 +1,69 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard1.4</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-BFJ|AnyCPU' ">
+    <IntermediateOutputPath>obj\Debug-BFJ</IntermediateOutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug-BFJ</OutputPath>
+    <DefineConstants>;DEBUG_BFJ;NETSTANDARD;NETSTANDARD1_4;BFJ</DefineConstants>
+    <NoWarn>1701;1702</NoWarn>
+    <NoStdLib>false</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-BFJ|iPhoneSimulator' ">
+    <IntermediateOutputPath>obj\iPhoneSimulator\Debug-BFJ</IntermediateOutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Debug-BFJ</OutputPath>
+    <DefineConstants>;DEBUG_BFJ;NETSTANDARD;NETSTANDARD1_4;BFJ</DefineConstants>
+    <NoWarn>1701;1702</NoWarn>
+    <NoStdLib>false</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-BFJ|iPhone' ">
+    <IntermediateOutputPath>obj\iPhone\Debug-BFJ</IntermediateOutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhone\Debug-BFJ</OutputPath>
+    <DefineConstants>;DEBUG_BFJ;NETSTANDARD;NETSTANDARD1_4;BFJ</DefineConstants>
+    <NoWarn>1701;1702</NoWarn>
+    <NoStdLib>false</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-Demo|AnyCPU' ">
+    <IntermediateOutputPath>obj\Debug-Demo</IntermediateOutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug-Demo</OutputPath>
+    <DefineConstants>;DEBUG;NETSTANDARD;NETSTANDARD1_4;DEMO</DefineConstants>
+    <NoWarn>1701;1702</NoWarn>
+    <NoStdLib>false</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-Demo|iPhoneSimulator' ">
+    <IntermediateOutputPath>obj\iPhoneSimulator\Debug-Demo</IntermediateOutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Debug-Demo</OutputPath>
+    <DefineConstants>;DEBUG;NETSTANDARD;NETSTANDARD1_4;DEMO</DefineConstants>
+    <NoWarn>1701;1702</NoWarn>
+    <NoStdLib>false</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-Demo|iPhone' ">
+    <IntermediateOutputPath>obj\iPhone\Debug-Demo</IntermediateOutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhone\Debug-Demo</OutputPath>
+    <DefineConstants>;DEBUG;NETSTANDARD;NETSTANDARD1_4;DEMO</DefineConstants>
+    <NoWarn>1701;1702</NoWarn>
+    <NoStdLib>false</NoStdLib>
+  </PropertyGroup>
 </Project>
