@@ -2,9 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-BFJ|AnyCPU' ">
+    <IntermediateOutputPath>obj\Debug-BFJ</IntermediateOutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug-BFJ</OutputPath>
+    <DefineConstants>;DEBUG_BFJ;NETSTANDARD;NETSTANDARD1_4;BFJ</DefineConstants>
+    <NoWarn>1701;1702</NoWarn>
+    <NoStdLib>false</NoStdLib>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-BFJ|x64'">
     <IntermediateOutputPath>obj\Debug-BFJ</IntermediateOutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -46,6 +58,16 @@
     <NoWarn>1701;1702</NoWarn>
     <NoStdLib>false</NoStdLib>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-Demo|x64'">
+    <IntermediateOutputPath>obj\Debug-Demo</IntermediateOutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug-Demo</OutputPath>
+    <DefineConstants>;DEBUG;NETSTANDARD;NETSTANDARD1_4;DEMO</DefineConstants>
+    <NoWarn>1701;1702</NoWarn>
+    <NoStdLib>false</NoStdLib>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-Demo|iPhoneSimulator' ">
     <IntermediateOutputPath>obj\iPhoneSimulator\Debug-Demo</IntermediateOutputPath>
     <DebugSymbols>true</DebugSymbols>
@@ -75,6 +97,15 @@
     <NoWarn></NoWarn>
     <NoStdLib>false</NoStdLib>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-BFJ|x64'">
+    <IntermediateOutputPath>obj\Release-BFJ</IntermediateOutputPath>
+    <DebugType />
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release-BFJ</OutputPath>
+    <DefineConstants />
+    <NoWarn />
+    <NoStdLib>false</NoStdLib>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-Demo|AnyCPU' ">
     <IntermediateOutputPath>obj\Release-Demo</IntermediateOutputPath>
     <DebugType></DebugType>
@@ -82,6 +113,15 @@
     <OutputPath>bin\Release-Demo</OutputPath>
     <DefineConstants></DefineConstants>
     <NoWarn></NoWarn>
+    <NoStdLib>false</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-Demo|x64'">
+    <IntermediateOutputPath>obj\Release-Demo</IntermediateOutputPath>
+    <DebugType />
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release-Demo</OutputPath>
+    <DefineConstants />
+    <NoWarn />
     <NoStdLib>false</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-BFJ|iPhone' ">
